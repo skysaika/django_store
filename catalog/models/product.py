@@ -13,7 +13,6 @@ class Product(models.Model):
     price = models.FloatField(verbose_name='цена')
     created_date = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     updated_date = models.DateTimeField(auto_now=True, verbose_name='дата последнего изменения')
-    created_at = models.DateTimeField(auto_now=True, verbose_name='несуществующее поле')
 
     def __str__(self):
         return f"Наименование товара: {self.title}. " \
