@@ -1,3 +1,4 @@
+from autoslug import AutoSlugField
 from django.db import models
 
 from catalog.models.category import Category
@@ -6,8 +7,9 @@ NULLABLE = {'blank': True, 'null': True}
 
 
 class Product(models.Model):
-    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='URL', default='')
+
     title = models.CharField(max_length=200, verbose_name='наименование')
+    # slug = AutoSlugField(populate_from='title', unique=True, max_length=255, verbose_name='URL')
     description = models.TextField(verbose_name='описание')
     image = models.ImageField(upload_to='images', verbose_name='превью', **NULLABLE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='категория')
