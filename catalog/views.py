@@ -3,29 +3,33 @@ from django.shortcuts import render
 from catalog.models import Product
 
 def base(request):
-    product_list = Product.objects.all()
-    context = {
-            'object_list': product_list
-    }
+    context = {}
     return render(request, 'catalog/base.html', context)
-
 
 
 def home(request):
     template = 'catalog/home.html'
-    product_list = Product.objects.all()
+    product_objects = Product.objects.filter(in_stock=True)[:3]
     context = {
-        'object_list': product_list
+        'object_list': product_objects,
+        'title':'Главная'
     }
     return render(request, template, context)
 
-def about(request):
-    template = 'catalog/about.html'
-    return render(request, template, {})
+def product_list(request):
+    template = 'catalog/product_list.html'
+    product_objects = Product.objects.all()
+    context = {
+        'object_list': product_objects,
+        'title':'Каталог'
+    }
+    return render(request, template, context)
 
 def contacts(request):
     template = 'catalog/contacts.html'
-    context = {}
+    context = {
+        'title': 'Контакты'
+    }
     if request.method == 'POST':
         context.update(request.POST.dict())
     return render(request, template, context)
