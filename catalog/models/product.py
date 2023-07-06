@@ -9,7 +9,6 @@ NULLABLE = {'blank': True, 'null': True}
 class Product(models.Model):
 
     title = models.CharField(max_length=200, verbose_name='наименование')
-    # slug = AutoSlugField(populate_from='title', unique=True, max_length=255, verbose_name='URL')
     description = models.TextField(verbose_name='описание')
     image = models.ImageField(upload_to='images', verbose_name='превью', **NULLABLE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='категория')
