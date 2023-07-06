@@ -2,6 +2,14 @@ from django.shortcuts import render
 
 from catalog.models import Product
 
+def base(request):
+    product_list = Product.objects.all()
+    context = {
+            'object_list': product_list
+    }
+    return render(request, 'catalog/base.html', context)
+
+
 
 def home(request):
     template = 'catalog/home.html'
@@ -9,7 +17,7 @@ def home(request):
     context = {
         'object_list': product_list
     }
-    return render(request, template, {})
+    return render(request, template, context)
 
 def about(request):
     template = 'catalog/about.html'

@@ -16,11 +16,13 @@ class Product(models.Model):
     created_date = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     updated_date = models.DateTimeField(auto_now=True, verbose_name='дата последнего изменения')
 
+    in_stock = models.BooleanField(default=True, verbose_name='в наличии')
+
     def __str__(self):
-        return f"Наименование товара: {self.title}. " \
-               f"Категория: {self.category}. " \
-               f"Цена: {self.price}. " \
-               f"Дата создания: {self.created_date}"
+        return f"Name: {self.title}. \n" \
+               f"Category: {self.category}. \n" \
+               f"Description: {self.description}. \n" \
+               f"Price: {self.price}. "
 
     class Meta:
         verbose_name = 'Продукт'
