@@ -1,31 +1,35 @@
-{% extends "catalog/base.html" %}
+{% extends 'catalog/base.html' %}
 
 {% block content %}
+    {% load mediapath %}
+
     {% for object in object_list %}
         <div class="col">
             <div class="card shadow-sm">
-                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-
-                <div class="card-body">
-                    <p class="card-text">
-                        {%  if object.in_stock %}
-                            {{ object }}
-                        {% else %}
-                            <span class="text-muted">{{ object }}</span>
-                        {% endif %}
-                    </p>
+                <img class="card-img-top" src="{{ object.image|mediapath }}" alt="{{ object.name }}">
+                 <div class="card-body">
+                     <p class="card-text mb-4">
+                         {% if object.in_stock %}
+                             <strong>{{ object.name }}</strong><br>
+                             Категория: {{ object.category }}<br>
+                             Описание: {{ object.description }}<br>
+                             Цена: {{ object.price }}
+                         {% else %}
+                             <span class="text-muted">Нет в наличии</span>
+                         {% endif %}
+                     </p>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
                             <button type="button" class="btn btn-sm
-                                    {% if not object.in_stock %}btn-outline-secondary
-                                    {% else %}btn-outline-primary{% endif %}"
-                                    {% if not object.in_stock %}disabled{% endif %}>
+                                {% if not object.in_stock %}btn-outline-secondary
+                                {% else %}btn-outline-primary{% endif %}"
+                                {% if not object.in_stock %}disabled{% endif %}>
                                 View
                             </button>
                             <button type="button" class="btn btn-sm
-                                    {% if not object.in_stock %}btn-outline-secondary
-                                    {% else %}btn-outline-primary{% endif %} btn-edit"
-                                    {% if not object.in_stock %}disabled{% endif %}>
+                                {% if not object.in_stock %}btn-outline-secondary
+                                {% else %}btn-outline-primary{% endif %} btn-edit"
+                                {% if not object.in_stock %}disabled{% endif %}>
                                 Edit
                             </button>
                         </div>
