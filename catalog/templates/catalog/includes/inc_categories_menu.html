@@ -1,25 +1,24 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'catalog:product_list' %}">Все категории</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page"
-                       href="{% url 'catalog:product_list' %}?category_tablets=tablets">Планшеты</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Мониторы</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">B2B</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Аксессуары</a>
-                </li>
-            </ul>
-        </div>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'catalog:product_list' %}?category=">Все категории</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link {% if category == 'tablets' %}active{% endif %}" href="{% url 'catalog:product_list' %}?category=Планшеты">Планшеты</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if category == 'monitors' %}active{% endif %}" href="{% url 'catalog:product_list' %}?category=Мониторы">Мониторы</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if category == 'b2b' %}active{% endif %}" href="{% url 'catalog:product_list' %}?category=B2B">B2B</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if category == 'accessories' %}active{% endif %}" href="{% url 'catalog:product_list' %}?category=Аксессуары">Аксессуары</a>
+        </li>
+      </ul>
     </div>
+  </div>
 </nav>
