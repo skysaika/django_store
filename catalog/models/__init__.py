@@ -2,7 +2,8 @@
 from .category import Category
 from .product import Product
 
-all = [
+__all__ = [
     'Category',
     'Product',
+
     ]
