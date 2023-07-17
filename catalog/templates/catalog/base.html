@@ -81,11 +81,11 @@
             <div class="col-lg-6 col-md-8 mx-auto">
                 <h1 class="fw-light">{{ title }}</h1>
             </div>
-            <!-- 'Условие, чтобы меню категорий отображалось только на странице Каталога' -->
-            {% if request.resolver_match.url_name == 'product_list' %}
-                <!-- 'Меню категорий вынесено в подшаблон' -->
-                {% include 'catalog/includes/inc_categories_menu.html' %}
-            {% endif %}
+{#            <!-- 'Условие, чтобы меню категорий отображалось только на странице Каталога' -->#}
+{#            {% if request.resolver_match.url_name == 'product_list' %}#}
+{#                <!-- 'Меню категорий вынесено в подшаблон' -->#}
+{#                {% include 'catalog/includes/inc_categories_menu.html' %}#}
+{#            {% endif %}#}
         </div>
     </section>
 

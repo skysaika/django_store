@@ -3,7 +3,9 @@
 {% block content %}
     {% load mediapath %}
 
-    {% for object in object_list|slice:":3" %} <!-- вывод на странице первых 3 активных товаров -->
+<!-- вывод на странице первых 3 активных товаров -->
+    {% for object in object_list|slice:":3" %}
+        <!-- Ссылка на подшаблон с карточками товаров -->
         {% include 'catalog/includes/inc_product_card.html' %}
     {% endfor %}
 {% endblock %}
