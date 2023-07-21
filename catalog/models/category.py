@@ -1,5 +1,5 @@
 from django.db import models
-from slugify import slugify
+
 
 class Category(models.Model):
     title = models.CharField(max_length=150, verbose_name='наименование')
