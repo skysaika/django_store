@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, TemplateView
-from .models import Product, Category
+from .models import Product, Category, Version
 
 
 class HomeView(TemplateView):
@@ -49,7 +49,7 @@ class ProductListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Каталог'
+        context['title'] = 'Вся продукция'
         return context
 
 class ProductByCategoryView(ListView):
@@ -66,6 +66,21 @@ class ProductByCategoryView(ListView):
         category = get_object_or_404(Category, id=self.kwargs['pk'])
         context['title'] = f'Товары категории {category.title}'
         return context
+
+
+class VersionListView(ListView):
+    model = Version
+    extra_context = {
+        'title': 'Список активных версий',
+    }
+
+    def get_queryset(self):
+        """Метод благодаря которому отображаются только активные записи"""
+        queryset = super().get_queryset()
+        queryset = queryset.filter(is_active_version=True)
+        return queryset
+
+
 
 class ContactsView(TemplateView):
     """Контроллер для контактов и обратной связи"""
