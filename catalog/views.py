@@ -4,15 +4,15 @@ from .models import Product, Category, Version
 
 
 class HomeView(TemplateView):
-    """Контроллер домашней страницы, показывает 3 случайных товара"""
+    """Контроллер домашней страницы"""
     template_name = 'catalog/home.html'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context_data = super().get_context_data(**kwargs)
         product_objects = Product.objects.filter(in_stock=True).order_by('?')[:3] # 3 товара в наличии в случ.порядке
-        context['object_list'] = product_objects
-        context['title'] = 'Главная'
-        return context
+        context_data['object_list'] = product_objects
+        context_data['title'] = 'Главная'
+        return context_data
 
 class CategoryListView(ListView):
     """Контроллер страницы со списком категорий"""
@@ -26,9 +26,9 @@ class CategoryListView(ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Список всех категорий'
-        return context
+        context_data = super().get_context_data(**kwargs)
+        context_data['title'] = 'Список всех категорий'
+        return context_data
 
 
 class ProductListView(ListView):
@@ -36,10 +36,9 @@ class ProductListView(ListView):
     model = Product
     template_name = 'catalog/product_list.html'
     context_object_name = 'object_list'
-    paginate_by = 10 # на странице 10 товаров
+    paginate_by = 10 # если больше 10 товаров на странице, переход на новую
 
     def get_queryset(self):
-        """Метод фильтрует товары по категориям"""
         category = self.request.GET.get('category', None)
         if category:
             queryset = Product.objects.filter(category__title__icontains=category)
@@ -47,28 +46,33 @@ class ProductListView(ListView):
             queryset = Product.objects.all()
         return queryset
 
+
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Вся продукция'
-        return context
+        context_data = super().get_context_data(**kwargs)
+        context_data['title'] = 'Вся продукция'
+        return context_data
 
 class ProductByCategoryView(ListView):
+    """Товары по категориям"""
     template_name = 'catalog/product_list.html'
     context_object_name = 'object_list'
 
     def get_queryset(self):
+        """Метод фильтрует товары по категориям"""
         category = get_object_or_404(Category, id=self.kwargs['pk'])
         queryset = Product.objects.filter(category=category)
         return queryset
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context_data = super().get_context_data(**kwargs)
         category = get_object_or_404(Category, id=self.kwargs['pk'])
-        context['title'] = f'Товары категории {category.title}'
-        return context
+        context_data['title'] = f'Товары категории {category.title}'
+        context_data['category_id'] = category.id  # add category_id to template's context
+        return context_data
 
-
+# ljltkfnm
 class VersionListView(ListView):
+    """Контроллер версий продукта"""
     model = Version
     extra_context = {
         'title': 'Список активных версий',
@@ -87,8 +91,8 @@ class ContactsView(TemplateView):
     template_name = 'catalog/contacts.html'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Контакты'
+        context_data = super().get_context_data(**kwargs)
+        context_data['title'] = 'Контакты'
         if self.request.method == 'POST':
-            context.update(self.request.POST.dict())
-        return context
+            context_data.update(self.request.POST.dict())
+        return context_data
