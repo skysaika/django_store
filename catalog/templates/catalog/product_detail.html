@@ -1,0 +1,62 @@
+{% extends 'catalog/base.html' %}
+
+{% block content %}
+    {% load mediapath %}
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title">{{ object.title }}</h5>
+    </div>
+    <div class="card-body">
+      <img src="{{ object.image|mediapath }}" alt="{{ object.name }}" class="card-img-top">
+      <p class="card-text">{{ object.description }}</p>
+      <p class="card-text">Price: {{ object.price }}$</p>
+    </div>
+    <div class="card-footer">
+      <a href="" class="btn btn-primary">Edit</a>
+        <a href="" class="btn btn-danger">Delete</a>
+    </div>
+  </div>
+{% endblock %}
+
+
+{##}
+{#{% extends 'catalog/base.html' %}#}
+{##}
+{#{% block content %}#}
+{#    {% load mediapath %}#}
+{#   <div class="col-12 mb-5">#}
+{#    <a class="btn btn-outline-primary" href="{% url 'catalog:create' %}">Добавить Продукт</a>#}
+{##}
+{#    </div>#}
+{##}
+{#    {%  for object in object_list %}#}
+{#        <div class="col-md-4">#}
+{#        <div class="card mb-4 box-shadow">#}
+{#            <div class="card-body">#}
+{#                <p class="card-text">#}
+{#                    {% if object.in_stock %}#}
+{#                        {{ object|title }}#}
+{#                        {% else %}#}
+{#                        <span class="text-muted">{{ object|title }}</span>#}
+{#                    {% endif %}#}
+{##}
+{#                </p>#}
+{#            <div class="d-flex justify-content-between align-items-center">#}
+{#                <div class="btn-group">#}
+{#                    <a href="#"#}
+{#                    class="btn btn-sm btn-outline-secondary">View</a>#}
+{#                    <a href="{%  url 'main:view_student' object.pk %}"#}
+{#                    class="btn btn-sm btn-outline-secondary">Edit</a>#}
+{#                    <a href="{%  url 'main:view_student' object.pk %}"#}
+{#                    class="btn btn-sm btn-outline-danger">Delete</a>#}
+{##}
+{#                </div>#}
+{##}
+{#            </div>#}
+{#            </div>#}
+{##}
+{#        </div>#}
+{##}
+{#        </div>#}
+{#    {% endfor %}#}
+{#{% endblock %}#}

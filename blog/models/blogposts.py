@@ -17,19 +17,20 @@ class BlogPost(models.Model):
     is_published = models.BooleanField(default=True, verbose_name='Опубликовано')
     view_count = models.PositiveIntegerField(default=0, verbose_name='Просмотры')
 
+    def __str__(self):
+        return f'{self.title}'
+
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
-
-        if self.slug != slugify(self.title):
-            self.slug = slugify(self.title) + '-' + str(uuid.uuid4())[:8]
-
-        return super().save(*args, **kwargs)
+            # если значение slug не задано, создаем его на основе заголовка статьи и случайного UUID
+            self.slug = slugify(self.title) + '-' + str(uuid.uuid4().hex[:6])
+            # проверяем, что значение slug уникально
+            while BlogPost.objects.filter(slug=self.slug).exists():
+                self.slug = slugify(self.title) + '-' + str(uuid.uuid4().hex[:6])
+        super(BlogPost, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'статья блога'
         verbose_name_plural = 'статьи блога'
         ordering = ('-created',)
 
-    def __str__(self):
-        return self.title

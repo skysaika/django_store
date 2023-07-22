@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, TemplateView
+from django.views.generic import ListView, TemplateView, DetailView
 from .models import Product, Category, Version
 
 
@@ -95,4 +95,17 @@ class ContactsView(TemplateView):
         context_data['title'] = 'Контакты'
         if self.request.method == 'POST':
             context_data.update(self.request.POST.dict())
+        return context_data
+
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'catalog/product_detail.html'
+    context_object_name = 'object'
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        pk = self.kwargs.get('pk')
+        context_data['pk'] = pk
+
         return context_data

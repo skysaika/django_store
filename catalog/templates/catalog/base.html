@@ -56,7 +56,7 @@
           <h4 class="text-white">О сайте MyShop</h4>
           <p class="text-muted">"Сайт, созданный в учебных целях, используется информация и материалы с официального сайта huiontab.ru.</p>
         </div>
-          <!-- 'Главное меню наверху' -->
+          <!-- 'Ссылка на Главное меню в верхнем правом углу' -->
       {% include 'catalog/includes/inc_catalog_menu.html' %}
       </div>
     </div>
@@ -81,12 +81,6 @@
             <div class="col-lg-6 col-md-8 mx-auto">
                 <h1 class="fw-light">{{ title }}</h1>
             </div>
-
-{#            <!-- 'Убрала это меню, Условие, чтобы меню категорий отображалось только на странице Каталога' -->#}
-{#            {% if request.resolver_match.url_name == 'product_list' %}#}
-{#                <!-- 'Меню категорий вынесено в подшаблон' -->#}
-{#                {% include 'catalog/includes/inc_categories_menu.html' %}#}
-{#            {% endif %}#}
         </div>
     </section>
 

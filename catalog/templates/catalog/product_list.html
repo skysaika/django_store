@@ -2,16 +2,15 @@
 
 {% block content %}
 
+    <!-- Подключена биб-ка папки media -->
     {% load mediapath %}
-
-
-
 
 {% for object in object_list %}
     <!-- 'Ссылка на подшаблон с карточками товаров' -->
     {% include 'catalog/includes/inc_product_card.html' %}
 {% endfor %}
-    <!-- добавляем кнопку "Вернуться к категориям" -->
+
+    <!-- Кнопка "К категориям" -->
 <div class="row">
     <div class="col text-center mt-3">
         <a href="{% url 'catalog:category_list' %}" class="btn btn-outline-secondary btn-sm">К категориям</a>

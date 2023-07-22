@@ -16,12 +16,12 @@
             </p>
             <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-sm
-                                {% if not object.in_stock %}btn-outline-secondary
-                                {% else %}btn-outline-primary{% endif %}"
-                            {% if not object.in_stock %}disabled{% endif %}>
+                    <a href="{% url 'catalog:product_detail' object.pk %}" class="btn btn-sm
+    {% if not object.in_stock %}btn-outline-secondary
+    {% else %}btn-outline-primary{% endif %}"
+                       {% if not object.in_stock %}disabled{% endif %}>
                         View
-                    </button>
+                    </a>
                     <button type="button" class="btn btn-sm
                                 {% if not object.in_stock %}btn-outline-secondary
                                 {% else %}btn-outline-primary{% endif %} btn-edit"
