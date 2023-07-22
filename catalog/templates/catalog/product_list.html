@@ -4,29 +4,38 @@
 
     {% load mediapath %}
 
-    {% for object in object_list %}
-        <!-- 'Ссылка на подшаблон с карточками товаров' -->
-        {% include 'catalog/includes/inc_product_card.html' %}
-    {% endfor %}
+
+
+
+{% for object in object_list %}
+    <!-- 'Ссылка на подшаблон с карточками товаров' -->
+    {% include 'catalog/includes/inc_product_card.html' %}
+{% endfor %}
+    <!-- добавляем кнопку "Вернуться к категориям" -->
+<div class="row">
+    <div class="col text-center mt-3">
+        <a href="{% url 'catalog:category_list' %}" class="btn btn-outline-secondary btn-sm">К категориям</a>
+    </div>
+</div>
 
 <!-- 'Пагинация страниц, если товаров больше 10, то автоматически появляется след. страница' -->
     {% if is_paginated %}
-        <div class="pagination">
+
             <span class="step-links">
-                {% if page_obj.has_previous %}
-                    <a href="?page=1">&laquo; Первая</a>
-                    <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
-                {% endif %}
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; First</a>
+                <a href="?page={{ page_obj.previous_page_number }}">Back</a>
+            {% endif %}
 
                 <span class="current-page">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </span>
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
 
                 {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a>
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
                 {% endif %}
-            </span>
+        </span>
         </div>
     {% endif %}
 
