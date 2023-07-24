@@ -1,5 +1,6 @@
-from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, TemplateView, DetailView
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy, reverse
+from django.views.generic import ListView, TemplateView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Product, Category, Version
 
 
@@ -34,11 +35,12 @@ class CategoryListView(ListView):
 class ProductListView(ListView):
     """Контроллер страницы со всеми товарами"""
     model = Product
-    template_name = 'catalog/product_list.html'
+    # template_name = 'catalog/product_list.html'
     context_object_name = 'object_list'
     paginate_by = 10 # если больше 10 товаров на странице, переход на новую
 
     def get_queryset(self):
+        """Метод фильтрует объекты Product по полю category, независимо от регистра символов"""
         category = self.request.GET.get('category', None)
         if category:
             queryset = Product.objects.filter(category__title__icontains=category)
@@ -64,6 +66,12 @@ class ProductByCategoryView(ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
+        """
+            Получает контекстные данные для шаблона.
+
+            :param kwargs: дополнительные параметры контекста
+            :return: словарь контекстных данных
+        """
         context_data = super().get_context_data(**kwargs)
         category = get_object_or_404(Category, id=self.kwargs['pk'])
         context_data['title'] = f'Товары категории {category.title}'
@@ -100,7 +108,7 @@ class ContactsView(TemplateView):
 
 class ProductDetailView(DetailView):
     model = Product
-    template_name = 'catalog/product_detail.html'
+    # template_name = 'catalog/product_detail.html'
     context_object_name = 'object'
 
     def get_context_data(self, **kwargs):
@@ -109,3 +117,34 @@ class ProductDetailView(DetailView):
         context_data['pk'] = pk
 
         return context_data
+
+
+class ProductCreateView(CreateView):
+    model = Product
+    fields = ['title', 'description', 'image', 'category', 'price', 'in_stock']
+    template_name = 'catalog/product_form.html'
+    success_url = reverse_lazy('catalog:product_list')
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    fields = ['title', 'description', 'image', 'category', 'price', 'in_stock']
+    template_name = 'catalog/product_form.html'
+    success_url = reverse_lazy('catalog:product_list')
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy('catalog:category_list')
+
+
+def toggle_activity(request, pk):
+    """Контроллер смены статуса продукта в налиичии/не в наличии"""
+    product_item = get_object_or_404(Product, pk=pk)
+    if product_item.in_stock:
+        product_item.in_stock = False
+    else:
+        product_item.in_stock = True
+
+    product_item.save()
+
+    return redirect(reverse('catalog:product_list'))
