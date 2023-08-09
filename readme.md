@@ -1,1 +1,2 @@
-c 19 дз, не закончила проект, дошла до 21, и перенесла в mynewshop, продолжение там
+
+from 19 hw, did not finish the project, reached 21, and transferred to mynewshop, continued there
