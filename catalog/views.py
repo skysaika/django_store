@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, TemplateView, DetailView, CreateView, UpdateView, DeleteView
+
+from .forms import ProductForm
 from .models import Product, Category, Version
 
 
@@ -78,7 +80,7 @@ class ProductByCategoryView(ListView):
         context_data['category_id'] = category.id  # add category_id to template's context
         return context_data
 
-# ljltkfnm
+
 class VersionListView(ListView):
     """Контроллер версий продукта"""
     model = Version
@@ -91,7 +93,6 @@ class VersionListView(ListView):
         queryset = super().get_queryset()
         queryset = queryset.filter(is_active_version=True)
         return queryset
-
 
 
 class ContactsView(TemplateView):
@@ -121,16 +122,19 @@ class ProductDetailView(DetailView):
 
 class ProductCreateView(CreateView):
     model = Product
-    fields = ['title', 'description', 'image', 'category', 'price', 'in_stock']
+    form_class = ProductForm
+    # fields = ['title', 'description', 'image', 'category', 'price', 'in_stock']
     template_name = 'catalog/product_form.html'
     success_url = reverse_lazy('catalog:product_list')
 
 
 class ProductUpdateView(UpdateView):
     model = Product
-    fields = ['title', 'description', 'image', 'category', 'price', 'in_stock']
+    form_class = ProductForm
+    # fields = ['title', 'description', 'image', 'category', 'price', 'in_stock']
     template_name = 'catalog/product_form.html'
     success_url = reverse_lazy('catalog:product_list')
+
 
 class ProductDeleteView(DeleteView):
     model = Product
@@ -138,7 +142,7 @@ class ProductDeleteView(DeleteView):
 
 
 def toggle_activity(request, pk):
-    """Контроллер смены статуса продукта в налиичии/не в наличии"""
+    """Контроллер смены статуса продукта в наличии/не в наличии"""
     product_item = get_object_or_404(Product, pk=pk)
     if product_item.in_stock:
         product_item.in_stock = False
