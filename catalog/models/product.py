@@ -18,6 +18,8 @@ class Product(models.Model):
 
     in_stock = models.BooleanField(default=True, verbose_name='в наличии')
 
+
+
     def __str__(self):
         return f"Название: {self.title}. \n" \
                f"Категория: {self.category}. \n" \

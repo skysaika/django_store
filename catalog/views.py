@@ -50,7 +50,6 @@ class ProductListView(ListView):
             queryset = Product.objects.all()
         return queryset
 
-
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data['title'] = 'Вся продукция'
@@ -121,14 +120,16 @@ class ProductDetailView(DetailView):
 
 
 class ProductCreateView(CreateView):
+    """Контроллер формы создания продукта"""
     model = Product
-    form_class = ProductForm
+    form_class = ProductForm  # форм класс
     # fields = ['title', 'description', 'image', 'category', 'price', 'in_stock']
     template_name = 'catalog/product_form.html'
     success_url = reverse_lazy('catalog:product_list')
 
 
 class ProductUpdateView(UpdateView):
+    """Контроллер формы редактирования продукта"""
     model = Product
     form_class = ProductForm
     # fields = ['title', 'description', 'image', 'category', 'price', 'in_stock']
@@ -137,6 +138,7 @@ class ProductUpdateView(UpdateView):
 
 
 class ProductDeleteView(DeleteView):
+    """Контроллер удаления продукта"""
     model = Product
     success_url = reverse_lazy('catalog:category_list')
 
