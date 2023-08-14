@@ -1,13 +1,14 @@
 from autoslug import AutoSlugField
 from django.db import models
 
+
 from catalog.models.category import Category
 
 NULLABLE = {'blank': True, 'null': True}
 
 
 class Product(models.Model):
-
+    """Модель продукта"""
     title = models.CharField(max_length=200, verbose_name='наименование')
     description = models.TextField(verbose_name='описание')
     image = models.ImageField(upload_to='images/', verbose_name='превью', **NULLABLE)
@@ -18,14 +19,19 @@ class Product(models.Model):
 
     in_stock = models.BooleanField(default=True, verbose_name='в наличии')
 
+    # поле versions со ссылкой на модель Version
+    # versions = models.ForeignKey('Version', on_delete=models.CASCADE, verbose_name='версия')
+    versions = models.ManyToManyField('Version', verbose_name='версия', blank=True, related_name='products')
+
+
 
 
     def __str__(self):
         return f"Название: {self.title}. \n" \
                f"Категория: {self.category}. \n" \
                f"Описание: {self.description}. \n" \
-               f"Цена: {self.price}. "
-
+               f"Цена: {self.price}. \n" \
+               f"Версия: {self.versions}"
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
