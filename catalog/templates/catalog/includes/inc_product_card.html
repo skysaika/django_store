@@ -1,4 +1,4 @@
- {% load mediapath %}
+{% load mediapath %}
 
 <!-- 'Карточка товара' -->
 <div class="col">
@@ -6,12 +6,19 @@
         <img class="card-img-top" src="{{ object.image|mediapath }}" alt="{{ object.name }}">
         <div class="card-body">
             <p class="card-text mb-4">
-            <!-- Если товар не в наличии, то фраза "нет в наличии" -->
                 {% if object.in_stock %}
-                    Название: {{ object.title }}<br>
+                    Название: {{ object.name }}<br>
                     Категория: {{ object.category }}<br>
                     Описание: {{ object.description }}<br>
-                    Цена: {{ object.price }}
+                    Цена: {{ object.price }}<br>
+                    <!-- 'Отображение активной версии в карточке товара' -->
+                    {% for version in object.version_set.all %}
+                        {% if version.is_active_version %}
+                            Активная версия: {{ version.version_name }}
+                        {% endif %}
+                    {% empty %}
+                        <span class="text-muted">Нет активной версии</span>
+                    {% endfor %}
                 {% else %}
                     <span class="text-muted">Нет в наличии</span>
                 {% endif %}
@@ -20,17 +27,8 @@
                 <div class="btn-group">
                     <a href="{% url 'catalog:product_detail' object.pk %}"
                        class="btn btn-sm btn-outline-primary">View</a>
-                    <a href="{% url 'catalog:update_product' object.pk %}" type="button"
-                       class="btn btn-sm btn-outline-secondary">Edit</a>
-                    <a href="{% url 'catalog:delete_product' object.pk %}" type="button"
-                       class="btn btn-sm btn-outline-danger">Delete</a>
                 </div>
-            <!-- 'Если товар в наличии, он активен, можно деактивировать и наоборот' -->
-                {% if object.in_stock %}
-                <a class="btn btn-warning" href="{% url 'catalog:toggle_activity' object.pk %}">Deactivate</a>
-                {% else %}
-                <a class="btn btn-success"href="{% url 'catalog:toggle_activity' object.pk %}">Activate</a>
-                {% endif %}
+
             </div>
         </div>
     </div>
