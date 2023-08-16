@@ -6,4 +6,11 @@
          <!-- 'Ссылка на подшаблон с карточками категорий' -->
         {% include 'catalog/includes/inc_category_card.html' %}
     {% endfor %}
+
+    <!-- Кнопка "В Каталог" -->
+        <div class="row">
+            <div class="col text-center mt-3">
+                <a href="{% url 'catalog:product_list' %}" class="btn btn-outline-primary btn-sm">В Каталог</a>
+            </div>
+        </div>
 {% endblock %}
