@@ -15,9 +15,4 @@ class Migration(migrations.Migration):
             name='versions',
             field=models.ManyToManyField(blank=True, related_name='products', to='catalog.version', verbose_name='версия'),
         ),
-        migrations.AddField(
-            model_name='version',
-            name='version_number',
-            field=models.IntegerField(default=0, verbose_name='номер версии'),
-        ),
     ]
