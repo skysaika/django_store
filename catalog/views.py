@@ -1,8 +1,10 @@
+from django.contrib import messages
+from django.forms import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, TemplateView, DetailView, CreateView, UpdateView, DeleteView
 
-from .forms import ProductForm
+from .forms import ProductForm, VersionForm
 from .models import Product, Category, Version
 
 
@@ -136,6 +138,31 @@ class ProductUpdateView(UpdateView):
     template_name = 'catalog/product_form.html'
     success_url = reverse_lazy('catalog:product_list')
 
+    def get_context_data(self, **kwargs):
+        """Метод обрабатывает POST, GET запросы"""
+        context_data = super().get_context_data(**kwargs)
+        ParentFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
+        if self.request.method == "POST":
+            context_data['formset'] = ParentFormset(self.request.POST, instance=self.object)
+        else:
+            context_data['formset'] = ParentFormset(instance=self.object)
+        return context_data
+
+
+
+    def form_valid(self, form):
+        """Обрабатывает проверку формы и сохраняет данные формы"""
+        formset = self.get_context_data()['formset']
+        self.object = form.save()
+        if formset.is_valid():
+            formset.instance = self.object
+            formset.save()
+        active_version = form.cleaned_data.get('active_version')
+        if active_version:
+            self.object.active_version = active_version
+            self.object.save()
+        return super().form_valid(form)
+
 
 class ProductDeleteView(DeleteView):
     """Контроллер удаления продукта"""
@@ -154,3 +181,25 @@ def toggle_activity(request, pk):
     product_item.save()
 
     return redirect(reverse('catalog:product_list'))
+
+
+class VersionListView(ListView):
+    """Контроллер версий продукта"""
+    model = Version
+    extra_context = {
+        'title': 'Список активных версий',
+    }
+
+    def get_queryset(self):
+        """Метод для фильтрации активных записей"""
+        queryset = super().get_queryset()
+        queryset = queryset.filter(is_active_version=True)
+        return queryset
+
+
+
+
+
+
+
+

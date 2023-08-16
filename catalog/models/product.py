@@ -19,9 +19,8 @@ class Product(models.Model):
 
     in_stock = models.BooleanField(default=True, verbose_name='в наличии')
 
-    # поле versions со ссылкой на модель Version
-    # versions = models.ForeignKey('Version', on_delete=models.CASCADE, verbose_name='версия')
-    versions = models.ManyToManyField('Version', verbose_name='версия', blank=True, related_name='products')
+
+
 
 
 
