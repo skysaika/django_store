@@ -2,24 +2,74 @@
 
 {% block content %}
     <div class="col-12">
-        <div class="row">
-            <div class="col-6">
-                <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            <div class="row">
                 <!-- Форма создания продукта -->
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                    <!-- Если товар существует, то кнопка сохранить, если нет, то создать -->
-                        <button type="submit" class="btn btn-success">
-                                {%  if object %}
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Создать продукт</h3>
+                        </div>
+                        <div class="card-body">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="btn btn-success">
+                                {% if object %}
                                     Сохранить
                                 {% else %}
-                                    Создать
+                                    Создать продукт
                                 {% endif %}
                             </button>
-                    </form>
+                        </div>
+                    </div>
                 </div>
+                <!-- Если продукт существует, то отображается форма версий -->
+                {% if object %}
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Версии продукта</h3>
+                            </div>
+                            <div class="card-body">
+                                <!-- Вывод формсет management_form-->
+                                {{ formset.management_form }}
+                                {% for form in formset.forms %}
+                                    {{ form.as_p }}
+                                    {% if not forloop.last %}
+                                        <hr>
+                                    {% endif %}
+                                {% endfor %}
+                                <div class="form-group">
+                                    <label for="active_version">Активная версия</label>
+                                    <select class="form-control" id="active_version" name="active_version">
+                                        {% for form in formset.forms %}
+                                            {% if form.instance.is_active %}
+                                                <option value="{{ form.instance.id }}">{{ form.instance.version_number }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <!-- Добавлена проверка на выбор только одной активной версии -->
+                                {% if formset.forms|length > 1 %}
+                                    <div class="alert alert-danger" role="alert">
+                                        Можно выбрать только одну активную версию продукта.
+                                    </div>
+                                {% endif %}
+                                <button type="submit" class="btn btn-success">
+                                    Добавить версию
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- Если продукт не создан, то форма версий недоступна -->
+                    <div class="col-6">
+                        <div class="alert alert-warning" role="alert">
+                            Сначала создайте продукт.
+                        </div>
+                    </div>
+                {% endif %}
             </div>
-        </div>
+        </form>
     </div>
 {% endblock %}

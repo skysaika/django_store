@@ -23,6 +23,8 @@
         </div>
     </div>
 
+
+
     <!-- 'Пагинация страниц, если товаров больше 10, то автоматически появляется след. страница' -->
     {% if is_paginated %}
 
@@ -41,6 +43,7 @@
                 <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
             {% endif %}
         </span>
+
 
     {% endif %}
 
