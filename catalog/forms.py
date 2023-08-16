@@ -1,13 +1,20 @@
 from django import forms
 
-from catalog.models import Product
+from catalog.models import Product, Version
+
+class StyleFormMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
 
 
-class ProductForm(forms.ModelForm):
+class ProductForm(StyleFormMixin, forms.ModelForm):
     """Форма для создания и редактирования продукта"""
+    # version = forms.ModelChoiceField(queryset=Version.objects.all(), label='Версия продукта')
     class Meta:
         model = Product
-        fields = ['title', 'description', 'image', 'category', 'price', 'in_stock']
+        fields = ['title', 'description', 'image', 'category', 'price', 'in_stock',]
 
     def clean_title(self):
         """Проверяет название продукта на наличие запрещенных слов.
@@ -33,3 +40,9 @@ class ProductForm(forms.ModelForm):
             if word in description.lower():
                 raise forms.ValidationError("Нельзя добавлять запрещенные слова в описание продукта.")
         return description
+
+
+class VersionForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Version
+        fields = '__all__'
