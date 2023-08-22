@@ -11,6 +11,7 @@ class User(AbstractUser):
     phone = models.CharField(max_length=20, verbose_name='телефон', **NULLABLE)
     avatar = models.ImageField(upload_to='users/', verbose_name='аватар', **NULLABLE)
     country = models.CharField(max_length=150, verbose_name='страна', **NULLABLE)
+    is_active = models.BooleanField(default=True, verbose_name='активный')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
