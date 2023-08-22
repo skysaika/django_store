@@ -148,8 +148,6 @@ class ProductUpdateView(UpdateView):
             context_data['formset'] = ParentFormset(instance=self.object)
         return context_data
 
-
-
     def form_valid(self, form):
         """Обрабатывает проверку формы и сохраняет данные формы"""
         formset = self.get_context_data()['formset']
