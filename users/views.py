@@ -3,9 +3,9 @@ from django.contrib.auth.views import LoginView as BaseLoginView
 from django.contrib.auth.views import LogoutView as BaseLogoutView
 from django.core.mail import send_mail
 from django.shortcuts import render
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 
-from users.forms import UserForm
+from users.forms import UserRegisterForm, UserForm
 from users.models import User
 from django.urls import reverse_lazy
 
@@ -26,11 +26,12 @@ class LogoutView(BaseLoginView):
 class RegisterView(CreateView):
     """Вывод формы регистрации"""
     model = User
-    form_class = UserForm
+    form_class = UserRegisterForm
     success_url = reverse_lazy('users:login')
     template_name = 'users/register.html'
 
     def form_valid(self, form):
+        """Метод отправки письма с регистрацией"""
         new_user = form.save()
         send_mail(
             subject='Поздравляем с регистрацией',
@@ -42,4 +43,14 @@ class RegisterView(CreateView):
         return super().form_valid(form)
 
 
+class UserUpdateView(UpdateView):
+    """Контроллер для редактирования профиля пользователя"""
+    model = User
+    form_class = UserForm
+    success_url = reverse_lazy('users:profile')
+
+
+    def get_object(self, queryset=None):
+        """Получение объекта пользователя"""
+        return self.request.user
 
