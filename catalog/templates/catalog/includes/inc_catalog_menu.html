@@ -7,7 +7,11 @@
         <li><a href="{% url 'catalog:category_list' %}" class="text-white">Категории</a></li>
         <li><a href="{% url 'catalog:product_list' %}" class="text-white">Все товары</a></li>
         <li><a href="{% url 'blog:list' %}" class="text-white">Блог</a></li>
-        <li><a href="{% url 'users:login' %}" class="text-white">Войти</a></li>
         <li><a href="{% url 'catalog:contacts' %}" class="text-white">Контакты</a></li>
+        {% if user.is_authenticated %}
+            <li><a href="{% url 'users:logout' %}" class="text-white">Выйти</a></li>
+        {% else %}
+            <li><a href="{% url 'users:login' %}" class="text-white">Войти</a></li>
+        {% endif %}
     </ul>
 </div>
