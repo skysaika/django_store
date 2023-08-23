@@ -1,13 +1,16 @@
+from random import randint
+
+
 from django.conf import settings
 from django.contrib.auth.views import LoginView as BaseLoginView
 from django.contrib.auth.views import LogoutView as BaseLogoutView
 from django.core.mail import send_mail
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.views.generic import CreateView, UpdateView
 
 from users.forms import UserRegisterForm, UserForm
 from users.models import User
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 
 
 # Create your views here.
@@ -53,4 +56,20 @@ class UserUpdateView(UpdateView):
     def get_object(self, queryset=None):
         """Получение объекта пользователя"""
         return self.request.user
+
+
+def generate_new_password(request):
+    """Контроллер для генерации нового пароля"""
+    new_password = ''.join([str(randint(0, 9)) for _ in range(12)])
+
+    send_mail(
+        subject='Вы сменили пароль',
+        message=f'Ваш новый пароль: {new_password}',
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[request.user.email],
+    )
+    request.user.set_password(new_password)
+    request.user.save()
+    return redirect(reverse('catalog:home'))
+
 
