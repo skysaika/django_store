@@ -1,5 +1,7 @@
 from autoslug import AutoSlugField
+from django.conf import settings
 from django.db import models
+
 
 
 from catalog.models.category import Category
@@ -19,18 +21,15 @@ class Product(models.Model):
 
     in_stock = models.BooleanField(default=True, verbose_name='в наличии')
 
-
-
-
-
-
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='владелец', **NULLABLE)
 
     def __str__(self):
         return f"Название: {self.title}. \n" \
                f"Категория: {self.category}. \n" \
                f"Описание: {self.description}. \n" \
                f"Цена: {self.price}. \n" \
-               f"Версия: {self.versions}"
+
+
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
