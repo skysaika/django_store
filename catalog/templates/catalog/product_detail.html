@@ -14,6 +14,7 @@
         <!-- 'картинка товара -->
       <img src="{{ object.image|mediapath }}" alt="{{ object.name }}" class="card-img-top">
       <p class="card-text">{{ object.description }}</p>
+      <p class="card-text">{{ object.owner|default:'-' }}</p>
       <p class="card-text">Price: {{ object.price }}$</p>
     </div>
 

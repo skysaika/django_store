@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
@@ -8,7 +9,7 @@ from .forms import ProductForm, VersionForm
 from .models import Product, Category, Version
 
 
-class HomeView(TemplateView):
+class HomeView(LoginRequiredMixin, TemplateView):
     """Контроллер домашней страницы"""
     template_name = 'catalog/home.html'
 
@@ -19,7 +20,7 @@ class HomeView(TemplateView):
         context_data['title'] = 'Главная'
         return context_data
 
-class CategoryListView(ListView):
+class CategoryListView(LoginRequiredMixin, ListView):
     """Контроллер страницы со списком категорий"""
     model = Category
     template_name = 'catalog/category_list.html'
@@ -36,7 +37,7 @@ class CategoryListView(ListView):
         return context_data
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     """Контроллер страницы со всеми товарами"""
     model = Product
     # template_name = 'catalog/product_list.html'
@@ -47,7 +48,7 @@ class ProductListView(ListView):
         """Метод фильтрует объекты Product по полю category, независимо от регистра символов"""
         category = self.request.GET.get('category', None)
         if category:
-            queryset = Product.objects.filter(category__title__icontains=category)
+            queryset = Product.objects.filter(category__title__icontains=category, owner=self.request.user)
         else:
             queryset = Product.objects.all()
         return queryset
@@ -57,7 +58,7 @@ class ProductListView(ListView):
         context_data['title'] = 'Вся продукция'
         return context_data
 
-class ProductByCategoryView(ListView):
+class ProductByCategoryView(LoginRequiredMixin, ListView):
     """Товары по категориям"""
     template_name = 'catalog/product_list.html'
     context_object_name = 'object_list'
@@ -82,7 +83,7 @@ class ProductByCategoryView(ListView):
         return context_data
 
 
-class VersionListView(ListView):
+class VersionListView(LoginRequiredMixin, ListView):
     """Контроллер версий продукта"""
     model = Version
     extra_context = {
@@ -96,7 +97,7 @@ class VersionListView(ListView):
         return queryset
 
 
-class ContactsView(TemplateView):
+class ContactsView(LoginRequiredMixin, TemplateView):
     """Контроллер для контактов и обратной связи"""
     template_name = 'catalog/contacts.html'
 
@@ -108,7 +109,7 @@ class ContactsView(TemplateView):
         return context_data
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     # template_name = 'catalog/product_detail.html'
     context_object_name = 'object'
@@ -121,7 +122,7 @@ class ProductDetailView(DetailView):
         return context_data
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     """Контроллер формы создания продукта"""
     model = Product
     form_class = ProductForm  # форм класс
@@ -129,8 +130,15 @@ class ProductCreateView(CreateView):
     template_name = 'catalog/product_form.html'
     success_url = reverse_lazy('catalog:product_list')
 
+    def form_valid(self, form):
+        """Метод обрабатывает проверку формы и сохраняет данные формы"""
+        self.object = form.save()
+        self.object.owner = self.request.user
+        self.object.save()
+        return super().form_valid(form)
 
-class ProductUpdateView(UpdateView):
+
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     """Контроллер формы редактирования продукта"""
     model = Product
     form_class = ProductForm
@@ -162,7 +170,7 @@ class ProductUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     """Контроллер удаления продукта"""
     model = Product
     success_url = reverse_lazy('catalog:category_list')
@@ -181,7 +189,7 @@ def toggle_activity(request, pk):
     return redirect(reverse('catalog:product_list'))
 
 
-class VersionListView(ListView):
+class VersionListView(LoginRequiredMixin, ListView):
     """Контроллер версий продукта"""
     model = Version
     extra_context = {
